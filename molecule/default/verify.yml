@@ -20,6 +20,17 @@
       ansible.builtin.assert:
         that: "'LANG=en_GB.UTF-8' in locale.stdout_lines"
 
+    - name: Read /etc/default/locale
+      ansible.builtin.stat:
+        path: /etc/default/locale
+      register: default_locale
+
+    - name: /etc/default/locale is still systemd's link to /etc/locale.conf
+      ansible.builtin.assert:
+        that:
+          - default_locale.stat.islnk
+          - default_locale.stat.lnk_source == '/etc/locale.conf'
+
     - name: Ask chrony which sources it is using
       ansible.builtin.command: chronyc -n sources
       register: sources
