@@ -15,6 +15,7 @@
     "chrony",
     "chronyc",
     "commitlint",
+    "dbus",
     "driftfile",
     "homelab",
     "iburst",
