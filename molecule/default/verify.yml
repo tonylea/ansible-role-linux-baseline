@@ -37,15 +37,14 @@
       ansible.builtin.assert:
         that: chrony_sources.stdout_lines == ["pool uk.pool.ntp.org iburst"]
 
-    - name: Read whether timesyncd is running
-      ansible.builtin.command: systemctl is-active systemd-timesyncd
-      register: timesyncd
-      changed_when: false
-      failed_when: false
+    - name: Gather service states
+      ansible.builtin.service_facts:
 
     - name: Only chrony keeps time
       ansible.builtin.assert:
-        that: timesyncd.stdout != "active"
+        that:
+          - ansible_facts.services['chrony.service'].state == "running"
+          - ansible_facts.services['systemd-timesyncd.service'].state | default('absent') != "running"
 
     - name: Read apt's effective unattended-upgrades settings
       ansible.builtin.command: apt-config dump
@@ -63,13 +62,14 @@
             'Unattended-Upgrade::Automatic-Reboot "false";' in apt_config.stdout_lines
 
     - name: Ask apt what it would upgrade
-      ansible.builtin.command: apt-get --simulate dist-upgrade
+      ansible.builtin.apt:
+        upgrade: dist
+      check_mode: true
       register: upgrade
-      changed_when: false
 
     - name: Nothing is left to upgrade
       ansible.builtin.assert:
-        that: "upgrade.stdout is search('^0 upgraded', multiline=True)"
+        that: not upgrade.changed
 
     - name: Gather installed packages
       ansible.builtin.package_facts:
