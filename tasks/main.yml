@@ -19,9 +19,10 @@
     name: "{{ linux_baseline_locale }}"
     state: present
 
+# Debian trixie keeps the locale in /etc/locale.conf; systemd links /etc/default/locale to it at every boot.
 - name: Set the default locale
   ansible.builtin.copy:
-    dest: /etc/default/locale
+    dest: /etc/locale.conf
     content: |
       LANG={{ linux_baseline_locale }}
     owner: root
