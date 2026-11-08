@@ -1,0 +1,13 @@
+galaxy_info:
+  namespace: tonylea
+  role_name: linux_baseline
+  author: Tony Lea
+  description: Base setup for every Linux machine
+  license: MIT
+  min_ansible_version: "2.16"
+  platforms:
+    - name: Debian
+      versions:
+        - trixie
+
+dependencies: []

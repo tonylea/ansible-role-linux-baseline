@@ -1,0 +1,6 @@
+# {{ ansible_managed }}
+pool {{ linux_baseline_ntp_pool }} iburst
+driftfile /var/lib/chrony/chrony.drift
+makestep 1 3
+rtcsync
+leapsectz right/UTC

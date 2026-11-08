@@ -1,0 +1,11 @@
+linux_baseline_packages:
+  - nano
+  - wget
+  - iproute2
+
+linux_baseline_timezone: Europe/London
+linux_baseline_locale: en_GB.UTF-8
+linux_baseline_ntp_pool: uk.pool.ntp.org
+
+# The user Ansible logs in as. It gets passwordless sudo, so Semaphore can run playbooks unattended.
+linux_baseline_sudo_user: "{{ ansible_user }}"
