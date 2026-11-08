@@ -38,7 +38,7 @@ The `community.general` collection, pinned in `requirements.yml`.
 Tests run with Molecule in a Debian trixie container running systemd, and check the machine's real state.
 
 ```sh
-pip install -r requirements-dev.txt
+pip install -r requirements-test.txt
 molecule test
 ```
 
