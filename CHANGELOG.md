@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.1](https://github.com/tonylea/ansible-role-linux-baseline/compare/v1.0.0...v1.0.1) (2026-11-08)
+
+### Bug Fixes
+
+* set the locale in /etc/locale.conf, so systemd's link at /etc/default/locale survives ([4b07231](https://github.com/tonylea/ansible-role-linux-baseline/commit/4b0723184556899cdf740d749caf2b30404cfef9))
+
 ## 1.0.0 (2026-11-08)
 
 ### Features
