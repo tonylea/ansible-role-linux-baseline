@@ -1,0 +1,41 @@
+{
+  "version": "0.2",
+  "language": "en-GB",
+  "dictionaries": ["softwareTerms"],
+  "ignorePaths": [
+    ".git/**",
+    ".husky/**",
+    "node_modules/**",
+    "CHANGELOG.md",
+    "package-lock.json"
+  ],
+  "words": [
+    "autoremove",
+    "cgroupns",
+    "chrony",
+    "chronyc",
+    "commitlint",
+    "driftfile",
+    "homelab",
+    "iburst",
+    "leapsectz",
+    "makestep",
+    "noreply",
+    "NOPASSWD",
+    "passwordless",
+    "rtcsync",
+    "runuser",
+    "secretlint",
+    "SIGRTMIN",
+    "sudoers",
+    "sysv",
+    "timedatectl",
+    "timesyncd",
+    "timezone",
+    "tmpfs",
+    "tonylea",
+    "trixie",
+    "vars",
+    "visudo"
+  ]
+}
