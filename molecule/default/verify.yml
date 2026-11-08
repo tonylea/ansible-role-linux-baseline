@@ -55,9 +55,12 @@
     - name: Security updates run unattended and never reboot
       ansible.builtin.assert:
         that:
-          - 'APT::Periodic::Unattended-Upgrade "1";' in apt_config.stdout_lines
-          - 'APT::Periodic::Update-Package-Lists "1";' in apt_config.stdout_lines
-          - 'Unattended-Upgrade::Automatic-Reboot "false";' in apt_config.stdout_lines
+          - >-
+            'APT::Periodic::Unattended-Upgrade "1";' in apt_config.stdout_lines
+          - >-
+            'APT::Periodic::Update-Package-Lists "1";' in apt_config.stdout_lines
+          - >-
+            'Unattended-Upgrade::Automatic-Reboot "false";' in apt_config.stdout_lines
 
     - name: Ask apt what it would upgrade
       ansible.builtin.command: apt-get --simulate dist-upgrade
