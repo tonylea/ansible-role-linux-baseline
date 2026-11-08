@@ -1,0 +1,81 @@
+- name: Verify
+  hosts: all
+  become: true
+  tasks:
+    - name: Read the timezone systemd is using
+      ansible.builtin.command: timedatectl show --property=Timezone --value
+      register: timezone
+      changed_when: false
+
+    - name: Timezone is Europe/London
+      ansible.builtin.assert:
+        that: timezone.stdout == "Europe/London"
+
+    - name: Read the locale a login shell gets
+      ansible.builtin.command: su - deploy -c locale
+      register: locale
+      changed_when: false
+
+    - name: Login shells use en_GB.UTF-8
+      ansible.builtin.assert:
+        that: "'LANG=en_GB.UTF-8' in locale.stdout_lines"
+
+    - name: Ask chrony which sources it is using
+      ansible.builtin.command: chronyc -n sources
+      register: sources
+      changed_when: false
+      until: sources.stdout_lines | select('match', '^\\^') | list | length > 0
+      retries: 10
+      delay: 3
+
+    - name: Read chrony's configured pool
+      ansible.builtin.command: grep -E '^(pool|server) ' /etc/chrony/chrony.conf
+      register: chrony_sources
+      changed_when: false
+
+    - name: Chrony only uses the UK pool
+      ansible.builtin.assert:
+        that: chrony_sources.stdout_lines == ["pool uk.pool.ntp.org iburst"]
+
+    - name: Read whether timesyncd is running
+      ansible.builtin.command: systemctl is-active systemd-timesyncd
+      register: timesyncd
+      changed_when: false
+      failed_when: false
+
+    - name: Only chrony keeps time
+      ansible.builtin.assert:
+        that: timesyncd.stdout != "active"
+
+    - name: Read apt's effective unattended-upgrades settings
+      ansible.builtin.command: apt-config dump
+      register: apt_config
+      changed_when: false
+
+    - name: Security updates run unattended and never reboot
+      ansible.builtin.assert:
+        that:
+          - 'APT::Periodic::Unattended-Upgrade "1";' in apt_config.stdout_lines
+          - 'APT::Periodic::Update-Package-Lists "1";' in apt_config.stdout_lines
+          - 'Unattended-Upgrade::Automatic-Reboot "false";' in apt_config.stdout_lines
+
+    - name: Ask apt what it would upgrade
+      ansible.builtin.command: apt-get --simulate dist-upgrade
+      register: upgrade
+      changed_when: false
+
+    - name: Nothing is left to upgrade
+      ansible.builtin.assert:
+        that: "upgrade.stdout is search('^0 upgraded', multiline=True)"
+
+    - name: Gather installed packages
+      ansible.builtin.package_facts:
+
+    - name: The common packages are installed
+      ansible.builtin.assert:
+        that: item in ansible_facts.packages
+      loop: [nano, wget, iproute2]
+
+    - name: Run sudo as the login user without a password
+      ansible.builtin.command: runuser -u deploy -- sudo -n true
+      changed_when: false

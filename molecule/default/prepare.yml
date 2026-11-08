@@ -1,0 +1,7 @@
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: Create the login user, as Raspberry Pi Imager would
+      ansible.builtin.user:
+        name: deploy
+        shell: /bin/bash
