@@ -2,7 +2,8 @@
 
 Base setup for every Linux machine in the homelab:
 
-- Packages kept up to date, unused ones removed, and security updates installed unattended. It never reboots on its own.
+- Packages kept up to date, unused ones removed, and security updates installed unattended.
+  It never reboots on its own.
 - `nano`, `wget` and `iproute2` installed.
 - Timezone `Europe/London` and locale `en_GB.UTF-8`.
 - Time kept by chrony from the UK NTP pool.
@@ -42,4 +43,5 @@ pip install -r requirements-test.txt
 molecule test
 ```
 
-Commits follow Conventional Commits. Releases are versioned and tagged automatically from `main`.
+Commits follow Conventional Commits.
+Releases are versioned and tagged automatically from `main`.
